@@ -4,16 +4,12 @@ import springbook.user.domain.User;
 
 import java.sql.*;
 
-public class UserDao {
-
-    private SimpleConnectionMaker simpleConnectionMaker;
-
-    public UserDao() {
-        this.simpleConnectionMaker = new SimpleConnectionMaker();
-    }
+public abstract class AbstractUserDao {
 
     public void add(User user) throws ClassNotFoundException, SQLException {
-        Connection c = simpleConnectionMaker.makeNewConnection();
+//        Class.forName("com.mysql.jdbc.Driver");
+//        Connection c = DriverManager.getConnection("jdbc:mysql://localhost/springbook", "spring", "book");
+        Connection c = getConnection();
 
         PreparedStatement ps = c.prepareStatement(
                 "insert  into users(id, name, password) values(?,?,?)"
@@ -30,7 +26,9 @@ public class UserDao {
 
     public User get(String id) throws ClassNotFoundException, SQLException {
 
-        Connection c = simpleConnectionMaker.makeNewConnection();
+//        Class.forName("com.mysql.jdbc.Driver");
+//        Connection c = DriverManager.getConnection("jdbc:mysql://localhost/springbook", "spring", "book");
+        Connection c = getConnection();
 
         PreparedStatement ps = c.prepareStatement("select * from users where id = ?");
         ps.setString(1, id);
@@ -49,22 +47,5 @@ public class UserDao {
         return user;
     }
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        User user = new User();
-
-        user.setId("eidoll");
-        user.setName("정재희");
-        user.setPassword("haul1!");
-
-        UserDao userDao = new UserDao();
-        userDao.add(user);
-
-        System.out.println(user.getId() + "등록 성공");
-
-        User user2 = userDao.get(user.getId());
-        System.out.println(user2.getName());
-        System.out.println(user2.getPassword());
-        System.out.println(user2.getId() + "조회 성공");
-    }
-
+    public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
 }

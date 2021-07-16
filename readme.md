@@ -65,3 +65,15 @@
   - 전체적으로 동일하면서 부분적으로 다른 구문으로 구성된 메소드의 코드 중복을 최소화하기에 유용
 - 팩토리 메소드 패턴(Factory Method Pattern)
   - 서브클래스에서 구체적인 오브젝트 생성 방법을 결정하게 하는 것
+
+
+  
+## 1.3 DAO의 확장
+- 지금까지 데이터 엑세스 로직을 어떻게 만들 것인지, DB 연결을 어떤 방법으로 할 것인지 두 개의 관심을 기준으로 분리
+- 두 관심은 변화의 성격이 다름
+
+##### 다른 방식의 분리
+- 본격적으로 독립시키며 손쉽게 확장할 수 있는 방식
+- `SimpleConnectionMaker` 클래스를 만들고 UserDao가 이용할 수 있는 방식
+  - `UserDao` 코드가 `SimpleConnectionMaker` 클래스에 종속되어 있으므로 UserDao 코드 수정 없이 DB 커넥션 변경할 방법이 없음
+  - `SimpleConnectionMaker`의 `makeNewConnection`을 이름만 변경해도 `UserDao`를 변경해야함

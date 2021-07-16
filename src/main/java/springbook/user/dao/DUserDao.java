@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DUserDao extends UserDao {
+public class DUserDao extends AbstractUserDao {
     public Connection getConnection() throws ClassNotFoundException, SQLException {
         // D사 DB Connection 생성 코드
         Class.forName("com.mysql.jdbc.Driver");
@@ -20,7 +20,7 @@ public class DUserDao extends UserDao {
         user.setName("김진호");
         user.setPassword("haul1!");
 
-        UserDao userDao = new DUserDao();
+        AbstractUserDao userDao = new DUserDao();
         userDao.add(user);
 
         System.out.println(user.getId() + "등록 성공");
