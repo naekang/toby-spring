@@ -1,4 +1,4 @@
-package springbook.user.dao;
+package springbook.user.dao.inheritance;
 
 import springbook.user.domain.User;
 
@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class NUserDao extends AbstractUserDao {
+public class DUserDao extends AbstractUserDao {
     public Connection getConnection() throws ClassNotFoundException, SQLException {
         // D사 DB Connection 생성 코드
         Class.forName("com.mysql.jdbc.Driver");

@@ -77,3 +77,13 @@
 - `SimpleConnectionMaker` 클래스를 만들고 UserDao가 이용할 수 있는 방식
   - `UserDao` 코드가 `SimpleConnectionMaker` 클래스에 종속되어 있으므로 UserDao 코드 수정 없이 DB 커넥션 변경할 방법이 없음
   - `SimpleConnectionMaker`의 `makeNewConnection`을 이름만 변경해도 `UserDao`를 변경해야함
+  
+##### 인터페이스의 도임
+- 추상화란?
+  - 어떤 것들의 공통적인 성격을 뽑아내어 `인터페이스`로 분리하는 작업
+
+- 인터페이스
+  - 기능만 정의
+  - 어떻게 할지는 자신을 구현한 클래스가 담당
+  - 자신을 구현한 클래스에 대한 구체적인 정보는 모두 감춤
+  - 인터페이스를 사용하는 코드쪽에서는 추상화한 통로만 이해하면 됨
