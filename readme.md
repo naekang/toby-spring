@@ -97,3 +97,66 @@
   - A 오브젝트 = 클라이언트 오브젝트
 - `UserDao`와 `ConnectionMaker` 구현 클래스 관계를 결정해주는 기능을 분리해서 두기에 가장 적절한 곳
   - `UserDao`의 클라이언트 오브젝트
+  
+##### 원칙과 패턴
+- `개방 폐쇄 원칙(OCP, Open-Closed Priciple)`
+  - 클래스나 모듈은 확장에는 열려있고 변경에는 닫혀있어야 함
+  - `UserDao`는 DB 연결 방법 기능 확장에 열려있지만 자신의 코드는 그런 변화에 영향을 받지않고 유지 가능
+- [SOLID 5원칙](https://naekang.tistory.com/151)
+- 높은 응집도와 낮은 결합도
+  - 높은 응집도: 한 모듈 내부 처리 요소들 간 기능적 연관도
+  - 낮은 결합도: 모듈간의 상호 의존도 및 연관 관계
+- 전략 패턴(Strategy Pattern)
+  - 자신의 기능 맥락에서, 필요에 따라 변경한 알고리즘을 인터페이스를 통해 통째로 외부로 분리시키고, 이름 구현한 구체적인 알고리즘 클래스를 필요에 따라 바꿔서 사용할 수 있게 하는 디자인 패턴
+  
+## 1.4 제어의 역전(IoC)
+
+##### 오브젝트 팩토리
+- `UserDaoTest`
+  - 기능이 잘 동작하는지 테스트 하는 책임
+  - 기존 `UserDao`가 직접 담당하던 기능
+  
+- 팩토리(Factory)
+  - 객체의 생성 방법을 결정하고 그렇게 만들어진 오브젝트를 돌려주는 ₩
+  - `UserDao`와 `ConnectionMaker`는 각각 애플리케이션의 핵심적인 데이터 로직과 기술 로직 담당
+  - `DaoFactory`는 이런 애플리케이션의 오브젝트들을 구성하고 관계를 정의하는 책임을 맡고 있음
+  - DAO 여러개일 경우
+    ```java
+    public UserDao DaoFactory {
+        public UserDao userDao() {
+            return new UserDao(new DConnectionMaker());
+        }
+        public AccountDao accountDao() {
+            return new AccountDao(new DConnectionMaker());
+        }
+        public MessageDao messageDao() {
+            return new MessageDao(new DConnectionMaker());
+        }
+    }
+    ```
+  - `new DConnectionMaker()`의 중복
+    ```java
+    public UserDao DaoFactory {
+        public UserDao userDao() {
+            return new UserDao(connectionMaker());
+        }
+        public AccountDao accountDao() {
+            return new AccountDao(connectionMaker());
+        }
+        public MessageDao messageDao() {
+            return new MessageDao(connectionMaker());
+        }
+        public ConnectionMaker connectionMaker() {
+            return new DConnectionMaker();
+        }
+    }
+    ```
+    
+##### 제어권 이전을 통한 제어관계 역전
+- 제어 흐름의 구조가 뒤바뀌는 것
+- 일반적
+  - main() 메소드 시작지점 -> 오브젝트 생성 -> 관계 설정 -> 호출
+- 제어의 역전
+  - 모든 제어권한을 자신이 아닌 다른 대상에 위임
+  - 모든 오브젝트가 위임받은 제어 권한을 갖는 특별한 오브젝트에 의해 결정되고 만들어짐
+- [프레임워크 vs 라이브러리](https://naekang.tistory.com/154)
