@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class UserDaoTest {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         User user = new User();
-        user.setId("naekang4");
+        user.setId("naekang");
         user.setName("김진호");
         user.setPassword("haul1!");
 
