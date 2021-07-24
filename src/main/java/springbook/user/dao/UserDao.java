@@ -8,6 +8,9 @@ public class UserDao {
 
     private ConnectionMaker connectionMaker;
 
+    // 수정자 메서드 사용을 위해 default 생성자
+    public UserDao() { }
+
     public UserDao(ConnectionMaker connectionMaker) {
         this.connectionMaker = connectionMaker;
     }
@@ -46,6 +49,10 @@ public class UserDao {
         c.close();
 
         return user;
+    }
+
+    public void setConnectionMaker(ConnectionMaker connectionMaker) {
+        this.connectionMaker = connectionMaker;
     }
 
 }
