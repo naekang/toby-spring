@@ -162,7 +162,7 @@
 - [프레임워크 vs 라이브러리](https://naekang.tistory.com/154)
 
 
-##### 스프링의 IoC
+## 1.5 스프링의 IoC
 - `Bean(빈)`
   - 스프링이 IoC 방식으로 관리하는 오브젝트
   - 스프링이 직접 제어권을 갖고 생성과 제어를 담당하는 오브젝트
@@ -207,7 +207,7 @@
 - 스프링 프레임워크(Spring Framework)
   - 스프링이 제공하는 모든 기능을 통틀어 말함
 
-##### 싱글톤 레지스트리와 오브젝트 스코프
+## 1.6 싱글톤 레지스트리와 오브젝트 스코프
 ```
 **오브젝트의 동일성과 동등성(Java)**
 - 동일성은 == 연산자
@@ -252,3 +252,62 @@
   - `prototype`: 컨테이너에 빈을 요청할 때마다 매번 새로운 오브젝트를 만들어줌
   - `request`: 웹을 통해 새로운 HTTP 요청이 생길 때마다 생성
   - `session`: 웹의 세션과 스코프가 유사
+
+## 1.7 의존관계 주입(DI)
+
+>DI(Dependency Injection): 오브젝트 레퍼런스를 외부로부터 주입받고 이를 통해 오브젝트와 다이내믹하게 의존관계가 만들어지는 것
+
+- DaoFactory처럼 객체를 생성하고 관계를 맺어주는 등의 작업을 담당하는 기능을 일반화한 것이 스프링의 IoC 컨테이너
+- `의존관계 주입`
+  - 일어나는 방법에 초점을 맞춘 것
+  
+##### 런타임 의존관계 설정
+- `의존관계`
+  - 누가 누구에게 의존하는 관계
+  - 의존관계는 방향성이 존재함
+  
+- `UserDao`의 의존관계
+  - `UserDao`가 `ConnectionMaker`에 의존하는 형태
+  - `ConnectionMaker`의 변화는 `UserDao`에도 영향을 줌
+  - `ConnectionMaker` 인터페이스를 구현한 클래스의 변화는 `UserDao`에 영향을 주지 않음
+  - 인터페이스에 대해서만 의존관계 형성 - 서로의 관계를 느슨하게 = 낮은 결합도
+  - 의존 오브젝트(Dependent Object): 실제 사용대상 ex) NConnectionMaker, DConnectionMaker
+  - 의존관계 주입의 세가지 조건
+    - 클래스 모델이나 코드에는 런타임 시점의 의존관계가 드러나지 않음. 그러기 위해서는 인터페이스에만 의존하고 있어야 함
+    - 런타임 시점의 의존관계는 컨테이너나 팩토리 같은 제3의 존재가 결정
+    - 의존관계는 사용할 오브젝트에 대한 레퍼펀스를 외부에서 주입해줌으로써 만들어
+  
+##### 의존관계 검색과 주입
+- `Dependency Lookup(의존관계 검색)`
+  - 외부로부터 주입이 아닌 스스로 검색
+  - 자신이 필요로 하는 의존 오브젝트를 능동적으로 찾음
+  - 자신이 어떤 클래스의 오브젝트를 이용할지 결정하지 않음
+  - 런타임 시 의존관계를 맺을 오브젝트를 결정하는 것과 오브젝트의 생성 작업은 외부 컨테이너에 IoC로 맡김
+
+- DaoFactory를 이용하는 생성자
+  ```java
+  public UserDao() {
+    DaoFactory daoFactory = new DaoFactory();
+    this.connectionMaker = daoFactory.connectionMaker();
+  }
+  ```
+  
+- 의존관계 검색을 이용하는 UserDao 생성자
+  ```java
+  public UserDao() {
+    AnnotationConfigApplicationContext context = new AnnotationConfigApplication(DaoFactory.class);
+    this.connectionMaker = context.getBean("connectionMaker", ConnectionMaker.class);
+  }
+  ```
+  
+- 의존관계 검색 vs 의존관계 주입
+  - 의존관계 검색에서는 검색하는 오브젝트는 자신이 스프링 빈일 필요가 없음
+  - 의존관계 주입에서는 UserDao와 ConnectionMaker 사이에 DI가 적용되려면 UserDao도 반드시 컨테이너가 만드는 빈 오브젝트여야함
+  
+##### 의존관계 주입의 응용
+- 기능 구현의 교환
+  - DI의 설정정보에 해당하는 DaoFactory만 다르게 만들어두면 개발, 운영 시에 각각 다른 런타임 오브젝트에 의존관계를 갖게함
+  
+- 부가 기능 추가
+  - DAO가 DB를 얼마나 많이 사용하는지 확인하는 방법
+    - DAO와 DB커넥션을 만드는 오브젝트 사이에 연결횟수를 카운팅하는 오브젝트 하나 더 추가

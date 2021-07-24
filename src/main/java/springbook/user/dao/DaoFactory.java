@@ -15,4 +15,14 @@ public class DaoFactory {
     public ConnectionMaker connectionMaker() {
         return new DConnectionMaker();
     }
+
+    @Bean
+    public ConnectionMaker countingConnectionMaker() {
+        return new CountingConnectionMaker(connectionMaker());
+    }
+
+    @Bean
+    public UserDao userDaoWithCounting() {
+        return new UserDao(countingConnectionMaker());
+    }
 }
