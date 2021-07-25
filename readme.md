@@ -352,3 +352,42 @@
     - `name`: DI에 사용할 수정자 메소드의 프로퍼티 이름
     - `ref`: 수정자 메소드를 통해 주입해줄 오브젝트의 빈 이름
   
+##### XML을 이용하는 Application Context
+- 관례에 따라 `applicationContext.xml`
+- `GenericXmlApplicationContext`의 생성자 파라미터로 XML파일의 클래스 패스 지정
+
+##### DataSource 인터페이스로 변환
+- DB커넥션을 가져오는 오브젝트의 기능을 추상화하여 ConnectionMaker와 동일한 역할을 하는 `DataSource`사용
+- 이미 DB연결과 풀링 기능을 갖춘 DataSource 구현 클래스 존재
+
+##### 프로퍼티 값의 주입
+- 값 주입
+  - 빈 오브젝트의 레퍼런스가 아닌 단순 정보도 오브젝트를 초기화하는 과정에서 수정자 메소드를 넣을 수 있음
+  - 오브젝트가 아닌 단순 값을 DI(String, Integer 등)
+  
+- 코드를 통한 DB연결정보 수집
+  ```java
+  dataSource.setDriverClass(com.mysql.jdbc.Driver.class);
+  dataSource.setUrl("jdbc:mysql://localhost/springbook");
+  dataSource.setUsername("spring");
+  dataSource.setPassword("book");
+  ```
+  
+- XML을 이용한 DB연결정보 설정
+  ```java
+  <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+  <property name="url" value="jdbc:mysql://localhost/springbook"/>
+  <property name="username" value="spring"/>
+  <property name="password" value="book"/>
+  ```
+  
+## 1.9 정리
+- 책임이 다른 코드를 분리해서 두 개의 클래스로 만듦 (관심사의 분리, 리팩토링)
+- 바뀔 수 있는 쪽의 클래스는 인터페이스를 구현, 다른 클래스에서 인터페이스를 통해서만 접근 (전략 패턴)
+- 자신의 책임 자체가 변경되는 경우 외에는 불필요한 변화가 발생하지 않도록 막아주고, 자신이 사용하는 외부 오브젝트의 기능은 자유롭게 확장하거나 변경할 수 있게 만듦 (개방 폐쇄 원칙)
+- 한쪽의 기능 변화가 다른 쪽의 변경을 요구하지 않음(낮은 결합도), 자신의 책임과 관심사에만 순수하게 집중(높은 응집도)
+- 오브젝트가 생성되고 야티 오브젝트와 관계를 맺는 작업의 제어권을 별도의 오브젝트 팩토리를 만들어 넘김. 또는 오브젝트 팩토리의 기능을 일반화한 IoC 컨테이너로 넘겨서 오브젝트가 자신이 사용할 사용할 대상의 생성이나 선택에 관한 책임으로부터 자유롭게 만들어줌
+- 싱글톤 레지스토리
+- 느슨한 의존관계를 만들고 런타임시 실제 사용할 구체적인 의존 오브젝트를 제3자의 도움으로 주입받음 (의존관계 주입/DI)
+- 의존 오브젝트를 주입할 때 생성자, 수정자 이용방법 (생성자 주입, 수정자 주입)
+- XML을 이용해 DI 설정정보를 만드는 방법과 의존 오브젝트가 아닌 일반 값을 외부에서 설정해서 런타임 시 주입하는 방법 (XML 설정)

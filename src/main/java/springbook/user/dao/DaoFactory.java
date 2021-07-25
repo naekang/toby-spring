@@ -2,34 +2,27 @@ package springbook.user.dao;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+
+import javax.sql.DataSource;
 
 @Configuration
 public class DaoFactory {
 
     @Bean
-    public UserDao userDaoByConstructor() {
-        return new UserDao(connectionMaker());
-    }
-
-    @Bean
     public UserDao userDao() {
         UserDao userDao = new UserDao();
-        userDao.setConnectionMaker(connectionMaker());
+        userDao.setDataSource(dataSource());
         return userDao;
     }
 
     @Bean
-    public ConnectionMaker connectionMaker() {
-        return new DConnectionMaker();
-    }
-
-    @Bean
-    public ConnectionMaker countingConnectionMaker() {
-        return new CountingConnectionMaker(connectionMaker());
-    }
-
-    @Bean
-    public UserDao userDaoWithCounting() {
-        return new UserDao(countingConnectionMaker());
+    public DataSource dataSource() {
+        SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
+        dataSource.setDriverClass(com.mysql.jdbc.Driver.class);
+        dataSource.setUrl("jdbc:mysql://localhost/springbook");
+        dataSource.setUsername("spring");
+        dataSource.setPassword("book");
+        return dataSource;
     }
 }

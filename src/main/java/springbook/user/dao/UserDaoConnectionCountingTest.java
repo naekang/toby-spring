@@ -6,6 +6,7 @@ import springbook.user.domain.User;
 
 import java.sql.SQLException;
 
+@Deprecated
 public class UserDaoConnectionCountingTest {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
