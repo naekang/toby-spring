@@ -125,6 +125,6 @@ local.properties
 .worksheet
 
 # Custom ignore list
-.idea
-.gradle
+../.idea
+../.gradle
 gradle
