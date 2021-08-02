@@ -94,4 +94,21 @@
   - 테스트가 주는 장점을 극대화
   - 테스트를 먼저 만들고 테스트가 성공하도록 하는 코드만 짜는 방식
   - 테스트 작성 시간과 애플리케이션 코드 작성 시간 간격이 짧아야 함
-  - 
+
+##### 테스트 코드 개선
+- 테스트 코드 역시 리팩토링의 대상
+- `UserDaoTest`에서 반복되는 부분
+  ```java
+  ApplicationContext ac = new GenericXmlApplicationContext("applicationContext.xml");
+  UserDao dao = ac.getBean("userDao",UserDao.class);
+  ```
+  
+- 중복 코드는 별도의 메서드로!
+- JUnit 테스트 수행 방식
+  1. 테스트 클래스에서 @Test가 붙은 public void 형 테스트 메소드를 모두 찾는다.
+  2. 테스트 클래스의 오브젝트 생성
+  3. @Before 메소드 먼저 실행
+  4. @Test 메소드 하나 호출 및 실행 후 결과 저장
+  5. @After 메소드 실행
+  6. 같은 과정 반복
+  7. 모든 테스트 결과 종합 후 반환
